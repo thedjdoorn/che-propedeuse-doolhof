@@ -1,0 +1,21 @@
+services:
+  doolhof:
+    build: .
+    pull_policy: build
+    restart: unless-stopped
+    networks:
+      - default
+      - proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.${ROUTER_NAME}.entrypoints=https"
+      - "traefik.http.routers.${ROUTER_NAME}.rule=Host(`${HOST}`)"
+      - "traefik.http.routers.${ROUTER_NAME}.tls=true"
+      - "traefik.http.routers.${ROUTER_NAME}.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.${ROUTER_NAME}.service=${SERVICE_NAME}"
+
+
+networks:
+  proxy:
+    external: true
